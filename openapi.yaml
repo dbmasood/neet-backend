@@ -1,0 +1,1573 @@
+openapi: 3.0.3
+info:
+  title: NEET / JEE / UPSC Multi-Exam Platform API
+  version: 1.0.0
+  description: >
+    Backend API for a multi-exam learning platform (NEET PG, NEET UG, JEE, UPSC).
+    Includes both user-facing app APIs and admin APIs, following clean architecture.
+
+servers:
+  - url: http://localhost:8080/v1
+    description: Local dev (Fiber /v1 base)
+
+tags:
+  - name: Auth
+  - name: App: User
+  - name: App: Practice
+  - name: App: Revision
+  - name: App: Exams
+  - name: App: Podcasts
+  - name: App: Wallet
+  - name: App: Referral
+  - name: Admin: Questions
+  - name: Admin: Subjects
+  - name: Admin: Topics
+  - name: Admin: Exams
+  - name: Admin: Podcasts
+  - name: Admin: Coupons
+  - name: Admin: Users
+  - name: Admin: AI Settings
+  - name: Admin: Analytics
+
+components:
+  securitySchemes:
+    UserAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token for end users.
+    AdminAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token with admin role claims.
+
+  schemas:
+    ExamCategory:
+      type: string
+      enum: [NEET_PG, NEET_UG, JEE, UPSC]
+
+    UserRole:
+      type: string
+      enum: [USER, ADMIN, SUPER_ADMIN]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        email:
+          type: string
+          nullable: true
+        telegramId:
+          type: string
+          nullable: true
+        primaryExam:
+          $ref: '#/components/schemas/ExamCategory'
+        role:
+          $ref: '#/components/schemas/UserRole'
+        createdAt:
+          type: string
+          format: date-time
+
+    ExamProfile:
+      type: object
+      properties:
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        totalQuestions:
+          type: integer
+        totalCorrect:
+          type: integer
+        totalTimeSeconds:
+          type: integer
+        overallLevel:
+          type: integer
+          minimum: 1
+          maximum: 5
+        currentStreakDays:
+          type: integer
+        longestStreakDays:
+          type: integer
+        lastLoginAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    MeResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        examProfile:
+          $ref: '#/components/schemas/ExamProfile'
+
+    Subject:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        name:
+          type: string
+        isActive:
+          type: boolean
+
+    Topic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        subjectId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        isActive:
+          type: boolean
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        subjectId:
+          type: string
+          format: uuid
+        topicId:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        optionA:
+          type: string
+        optionB:
+          type: string
+        optionC:
+          type: string
+        optionD:
+          type: string
+        correctOption:
+          type: integer
+          minimum: 1
+          maximum: 4
+        explanation:
+          type: string
+          nullable: true
+        difficultyLevel:
+          type: integer
+          minimum: 1
+          maximum: 5
+        choiceType:
+          type: string
+          enum: [single, multi]
+        isClinical:
+          type: boolean
+        isImageBased:
+          type: boolean
+        isHighYield:
+          type: boolean
+        isActive:
+          type: boolean
+
+    QuestionCreateRequest:
+      type: object
+      required: [exam, subjectId, topicId, questionText, optionA, optionB, optionC, optionD, correctOption]
+      properties:
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        subjectId:
+          type: string
+          format: uuid
+        topicId:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        optionA:
+          type: string
+        optionB:
+          type: string
+        optionC:
+          type: string
+        optionD:
+          type: string
+        correctOption:
+          type: integer
+          minimum: 1
+          maximum: 4
+        explanation:
+          type: string
+        difficultyLevel:
+          type: integer
+          minimum: 1
+          maximum: 5
+        choiceType:
+          type: string
+          enum: [single, multi]
+        isClinical:
+          type: boolean
+        isImageBased:
+          type: boolean
+        isHighYield:
+          type: boolean
+        isActive:
+          type: boolean
+
+    QuestionUpdateRequest:
+      type: object
+      properties:
+        subjectId:
+          type: string
+          format: uuid
+        topicId:
+          type: string
+          format: uuid
+        questionText:
+          type: string
+        optionA:
+          type: string
+        optionB:
+          type: string
+        optionC:
+          type: string
+        optionD:
+          type: string
+        correctOption:
+          type: integer
+        explanation:
+          type: string
+        difficultyLevel:
+          type: integer
+        choiceType:
+          type: string
+          enum: [single, multi]
+        isClinical:
+          type: boolean
+        isImageBased:
+          type: boolean
+        isHighYield:
+          type: boolean
+        isActive:
+          type: boolean
+
+    PracticeSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        mode:
+          type: string
+          enum: [smart, custom, revision, exam]
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        status:
+          type: string
+          enum: [in_progress, completed, abandoned]
+        totalQuestionsPlanned:
+          type: integer
+          nullable: true
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    PracticeSessionCreateRequest:
+      type: object
+      required: [mode]
+      properties:
+        mode:
+          type: string
+          enum: [smart, custom, revision, exam]
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        subjectIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        topicIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        difficultyLevels:
+          type: array
+          items:
+            type: integer
+        numQuestions:
+          type: integer
+        timeLimitMinutes:
+          type: integer
+          nullable: true
+
+    PracticeSessionQuestion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sequenceIndex:
+          type: integer
+        question:
+          $ref: '#/components/schemas/Question'
+        selectedOption:
+          type: integer
+          nullable: true
+        isCorrect:
+          type: boolean
+          nullable: true
+        timeTakenMs:
+          type: integer
+          nullable: true
+
+    PracticeSessionDetail:
+      type: object
+      properties:
+        session:
+          $ref: '#/components/schemas/PracticeSession'
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PracticeSessionQuestion'
+
+    PracticeAnswerRequest:
+      type: object
+      required: [sessionQuestionId, selectedOption]
+      properties:
+        sessionQuestionId:
+          type: string
+          format: uuid
+        selectedOption:
+          type: integer
+        timeTakenMs:
+          type: integer
+
+    RevisionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        question:
+          $ref: '#/components/schemas/Question'
+        nextReviewAt:
+          type: string
+          format: date-time
+        intervalIndex:
+          type: integer
+        timesReviewed:
+          type: integer
+
+    ExamConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        name:
+          type: string
+        type:
+          type: string
+          enum: [MOCK, SUBJECT_TEST, REWARD_EVENT, DAILY_TEST]
+        description:
+          type: string
+        numQuestions:
+          type: integer
+        timeLimitMinutes:
+          type: integer
+        marksPerCorrect:
+          type: number
+          format: float
+        negativePerWrong:
+          type: number
+          format: float
+        entryFee:
+          type: integer
+          description: Amount in paise / cents
+        scheduleStartAt:
+          type: string
+          format: date-time
+          nullable: true
+        scheduleEndAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, ONGOING, COMPLETED]
+
+    ExamConfigCreateRequest:
+      type: object
+      required: [exam, name, type, numQuestions, timeLimitMinutes]
+      properties:
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        name:
+          type: string
+        type:
+          type: string
+          enum: [MOCK, SUBJECT_TEST, REWARD_EVENT, DAILY_TEST]
+        description:
+          type: string
+        numQuestions:
+          type: integer
+        timeLimitMinutes:
+          type: integer
+        marksPerCorrect:
+          type: number
+        negativePerWrong:
+          type: number
+        entryFee:
+          type: integer
+        scheduleStartAt:
+          type: string
+          format: date-time
+          nullable: true
+        scheduleEndAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    ExamConfigUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        numQuestions:
+          type: integer
+        timeLimitMinutes:
+          type: integer
+        marksPerCorrect:
+          type: number
+        negativePerWrong:
+          type: number
+        entryFee:
+          type: integer
+        scheduleStartAt:
+          type: string
+          format: date-time
+          nullable: true
+        scheduleEndAt:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          type: string
+          enum: [DRAFT, SCHEDULED, ONGOING, COMPLETED]
+
+    ExamSummary:
+      type: object
+      properties:
+        config:
+          $ref: '#/components/schemas/ExamConfig'
+        isRegistered:
+          type: boolean
+        isCompleted:
+          type: boolean
+        bestScore:
+          type: number
+          format: float
+          nullable: true
+
+    PodcastEpisode:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        subjectId:
+          type: string
+          format: uuid
+          nullable: true
+        topicId:
+          type: string
+          format: uuid
+          nullable: true
+        title:
+          type: string
+        description:
+          type: string
+        audioUrl:
+          type: string
+        durationSeconds:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+
+    PodcastCreateRequest:
+      type: object
+      required: [exam, title, audioUrl]
+      properties:
+        exam:
+          $ref: '#/components/schemas/ExamCategory'
+        subjectId:
+          type: string
+          format: uuid
+        topicId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        audioUrl:
+          type: string
+        durationSeconds:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+
+    WalletSummary:
+      type: object
+      properties:
+        balance:
+          type: integer
+          description: Balance in paise/cents
+        lifetimeEarned:
+          type: integer
+        lifetimeSpent:
+          type: integer
+
+    WalletTransaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+        type:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    Coupon:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        amount:
+          type: integer
+        maxUsesTotal:
+          type: integer
+        maxUsesPerUser:
+          type: integer
+        expiresAt:
+          type: string
+          format: date-time
+          nullable: true
+        isActive:
+          type: boolean
+
+    CouponCreateRequest:
+      type: object
+      required: [code, type]
+      properties:
+        code:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          description: FIXED / ENTRY_PASS / BONUS
+        amount:
+          type: integer
+        maxUsesTotal:
+          type: integer
+        maxUsesPerUser:
+          type: integer
+        expiresAt:
+          type: string
+          format: date-time
+        isActive:
+          type: boolean
+
+    CouponRedeemRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+
+    ReferralSummary:
+      type: object
+      properties:
+        referralCode:
+          type: string
+        totalInvited:
+          type: integer
+        joined:
+          type: integer
+        activated:
+          type: integer
+        totalEarned:
+          type: integer
+
+    AISettings:
+      type: object
+      properties:
+        weaknessMinAttempts:
+          type: integer
+        weaknessThresholdPercent:
+          type: integer
+        strongThresholdPercent:
+          type: integer
+        revisionIntervalsDays:
+          type: array
+          items:
+            type: integer
+        includeGuessedCorrect:
+          type: boolean
+        revisionEnabled:
+          type: boolean
+
+paths:
+  /v1/auth/telegram:
+    post:
+      tags: [Auth]
+      summary: Login or signup via Telegram
+      operationId: authTelegram
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [telegramId, exam]
+              properties:
+                telegramId:
+                  type: string
+                displayName:
+                  type: string
+                exam:
+                  $ref: '#/components/schemas/ExamCategory'
+      responses:
+        '200':
+          description: Auth success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /v1/me:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: User]
+      summary: Get current user profile and exam stats
+      operationId: getMe
+      responses:
+        '200':
+          description: Current user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeResponse'
+
+  /v1/subjects:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: User]
+      summary: List subjects for current exam
+      operationId: listSubjects
+      parameters:
+        - in: query
+          name: exam
+          schema:
+            $ref: '#/components/schemas/ExamCategory'
+          required: false
+      responses:
+        '200':
+          description: List of subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+
+  /v1/topics:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: User]
+      summary: List topics for a subject
+      operationId: listTopics
+      parameters:
+        - in: query
+          name: subjectId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: List of topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+
+  /v1/practice/sessions:
+    post:
+      security:
+        - UserAuth: []
+      tags: [App: Practice]
+      summary: Create a new practice session
+      operationId: createPracticeSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PracticeSessionCreateRequest'
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeSession'
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Practice]
+      summary: List user practice sessions
+      operationId: listPracticeSessions
+      responses:
+        '200':
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PracticeSession'
+
+  /v1/practice/sessions/{id}:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Practice]
+      summary: Get practice session details
+      operationId: getPracticeSession
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Session detail with questions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeSessionDetail'
+
+  /v1/practice/sessions/{id}/answers:
+    post:
+      security:
+        - UserAuth: []
+      tags: [App: Practice]
+      summary: Submit an answer for a practice session question
+      operationId: answerPracticeQuestion
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PracticeAnswerRequest'
+      responses:
+        '200':
+          description: Answer stored, returns updated question state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PracticeSessionQuestion'
+
+  /v1/revision/queue:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Revision]
+      summary: Get revision items due
+      operationId: getRevisionQueue
+      responses:
+        '200':
+          description: List of revision items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RevisionItem'
+
+  /v1/podcasts:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Podcasts]
+      summary: List podcasts for current exam
+      operationId: listPodcasts
+      parameters:
+        - in: query
+          name: subjectId
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: topicId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of podcast episodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PodcastEpisode'
+
+  /v1/podcasts/{id}:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Podcasts]
+      summary: Get one podcast episode
+      operationId: getPodcast
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Episode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisode'
+
+  /v1/events:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Exams]
+      summary: List available exams/events
+      operationId: listEvents
+      responses:
+        '200':
+          description: Exam list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamSummary'
+
+  /v1/wallet:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Wallet]
+      summary: Get wallet summary for current user
+      operationId: getWallet
+      responses:
+        '200':
+          description: Wallet summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletSummary'
+
+  /v1/wallet/transactions:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Wallet]
+      summary: List wallet transactions
+      operationId: listWalletTransactions
+      responses:
+        '200':
+          description: Transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WalletTransaction'
+
+  /v1/referral:
+    get:
+      security:
+        - UserAuth: []
+      tags: [App: Referral]
+      summary: Get referral stats for current user
+      operationId: getReferralSummary
+      responses:
+        '200':
+          description: Referral summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferralSummary'
+
+  /v1/coupons/redeem:
+    post:
+      security:
+        - UserAuth: []
+      tags: [App: Wallet]
+      summary: Redeem coupon code
+      operationId: redeemCoupon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponRedeemRequest'
+      responses:
+        '200':
+          description: Coupon applied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletSummary'
+
+  /v1/admin/questions:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Questions]
+      summary: List questions
+      operationId: adminListQuestions
+      parameters:
+        - in: query
+          name: exam
+          schema:
+            $ref: '#/components/schemas/ExamCategory'
+        - in: query
+          name: subjectId
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: topicId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Questions]
+      summary: Create question
+      operationId: adminCreateQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+
+  /v1/admin/questions/{id}:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Questions]
+      summary: Get question
+      operationId: adminGetQuestion
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+    patch:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Questions]
+      summary: Update question
+      operationId: adminUpdateQuestion
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionUpdateRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+    delete:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Questions]
+      summary: Delete question
+      operationId: adminDeleteQuestion
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+
+  /v1/admin/subjects:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Subjects]
+      summary: List subjects
+      operationId: adminListSubjects
+      responses:
+        '200':
+          description: Subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Subjects]
+      summary: Create subject
+      operationId: adminCreateSubject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [exam, name]
+              properties:
+                exam:
+                  $ref: '#/components/schemas/ExamCategory'
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+
+  /v1/admin/topics:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Topics]
+      summary: List topics
+      operationId: adminListTopics
+      parameters:
+        - in: query
+          name: subjectId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Topics]
+      summary: Create topic
+      operationId: adminCreateTopic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [subjectId, name]
+              properties:
+                subjectId:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+
+  /v1/admin/exams:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Exams]
+      summary: List exam configs
+      operationId: adminListExams
+      responses:
+        '200':
+          description: Exams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamConfig'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Exams]
+      summary: Create exam config
+      operationId: adminCreateExam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamConfigCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamConfig'
+
+  /v1/admin/exams/{id}:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Exams]
+      summary: Get exam config
+      operationId: adminGetExam
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Exam
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamConfig'
+    patch:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Exams]
+      summary: Update exam config
+      operationId: adminUpdateExam
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamConfigUpdateRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamConfig'
+    delete:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Exams]
+      summary: Delete exam config
+      operationId: adminDeleteExam
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /v1/admin/podcasts:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Podcasts]
+      summary: List podcasts
+      operationId: adminListPodcasts
+      responses:
+        '200':
+          description: Episodes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PodcastEpisode'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Podcasts]
+      summary: Create podcast episode
+      operationId: adminCreatePodcast
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PodcastCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisode'
+
+  /v1/admin/podcasts/{id}:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Podcasts]
+      summary: Get podcast episode
+      operationId: adminGetPodcast
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Episode
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisode'
+    patch:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Podcasts]
+      summary: Update podcast episode
+      operationId: adminUpdatePodcast
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PodcastCreateRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastEpisode'
+    delete:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Podcasts]
+      summary: Delete podcast episode
+      operationId: adminDeletePodcast
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /v1/admin/coupons:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Coupons]
+      summary: List coupons
+      operationId: adminListCoupons
+      responses:
+        '200':
+          description: Coupons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Coupon'
+    post:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Coupons]
+      summary: Create coupon
+      operationId: adminCreateCoupon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+
+  /v1/admin/coupons/{id}:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Coupons]
+      summary: Get coupon
+      operationId: adminGetCoupon
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Coupon
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+    patch:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Coupons]
+      summary: Update coupon
+      operationId: adminUpdateCoupon
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouponCreateRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+    delete:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Coupons]
+      summary: Delete coupon
+      operationId: adminDeleteCoupon
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '204':
+          description: Deleted
+
+  /v1/admin/ai-settings:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: AI Settings]
+      summary: Get AI settings (weakness + revision engine)
+      operationId: adminGetAISettings
+      responses:
+        '200':
+          description: AI settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AISettings'
+    put:
+      security:
+        - AdminAuth: []
+      tags: [Admin: AI Settings]
+      summary: Update AI settings
+      operationId: adminUpdateAISettings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AISettings'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AISettings'
+
+  /v1/admin/analytics/overview:
+    get:
+      security:
+        - AdminAuth: []
+      tags: [Admin: Analytics]
+      summary: Get high-level analytics overview for dashboard
+      operationId: adminAnalyticsOverview
+      parameters:
+        - in: query
+          name: exam
+          schema:
+            $ref: '#/components/schemas/ExamCategory'
+        - in: query
+          name: range
+          schema:
+            type: string
+            enum: [today, 7d, 30d]
+      responses:
+        '200':
+          description: Overview metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalUsers:
+                    type: integer
+                  activeUsers:
+                    type: integer
+                  questionsAnswered:
+                    type: integer
+                  averageAccuracy:
+                    type: number
+                  averageStudyMinutes:
+                    type: number
+                  totalRewards:
+                    type: integer

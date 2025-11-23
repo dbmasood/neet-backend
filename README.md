@@ -63,6 +63,18 @@ make compose-up
 make run
 ```
 
+```
+docker exec -i db psql -U user -d db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+./scripts/run_migrations.sh
+
+
+set -o allexport; source .env; set +o allexport
+go run ./cmd/app
+
+
+```
+
 ### Integration tests (can be run in CI)
 
 ```sh

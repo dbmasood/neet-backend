@@ -1,0 +1,28 @@
+package v1
+
+import (
+	"net/http"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func registerFeedRoutes(api fiber.Router, r *Routes) {
+	api.Get("/feed", r.feed)
+}
+
+// @Summary Feed posts
+// @Tags App: Feed
+// @Security UserAuth
+// @Produce json
+// @Success 200 {array} entity.FeedPost
+// @Failure 500 {object} response.Error
+// @Router /feed [get]
+func (r *Routes) feed(ctx *fiber.Ctx) error {
+	posts, err := r.uc.Feed.List(ctx.UserContext())
+	if err != nil {
+		r.l.Error(err, "http - v1 - feed")
+		return errorResponse(ctx, http.StatusInternalServerError, "unable to load feed")
+	}
+
+	return ctx.Status(http.StatusOK).JSON(posts)
+}

@@ -18,6 +18,7 @@ type (
 		NATS    NATS
 		Metrics Metrics
 		Swagger Swagger
+		JWT     JWT
 	}
 
 	// App -.
@@ -69,6 +70,11 @@ type (
 	// Swagger -.
 	Swagger struct {
 		Enabled bool `env:"SWAGGER_ENABLED" envDefault:"false"`
+	}
+	JWT struct {
+		UserSecret      string `env:"JWT_USER_SECRET,required"`
+		AdminSecret     string `env:"JWT_ADMIN_SECRET,required"`
+		TokenTTLMinutes int    `env:"JWT_TOKEN_TTL_MINUTES" envDefault:"1440"`
 	}
 )
 

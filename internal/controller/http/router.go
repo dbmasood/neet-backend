@@ -10,6 +10,7 @@ import (
 	"github.com/evrone/go-clean-template/internal/controller/http/middleware"
 	v1 "github.com/evrone/go-clean-template/internal/controller/http/v1"
 	"github.com/evrone/go-clean-template/internal/usecase"
+	"github.com/evrone/go-clean-template/pkg/jwt"
 	"github.com/evrone/go-clean-template/pkg/logger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -22,7 +23,15 @@ import (
 // @version     1.0
 // @host        localhost:8080
 // @BasePath    /v1
-func NewRouter(app *fiber.App, cfg *config.Config, t usecase.Translation, l logger.Interface) {
+// @securityDefinitions.apikey UserAuth
+// @in header
+// @name Authorization
+// @description Bearer Auth for users (format: Bearer {token})
+// @securityDefinitions.apikey AdminAuth
+// @in header
+// @name Authorization
+// @description Bearer Auth for admins (format: Bearer {token})
+func NewRouter(app *fiber.App, cfg *config.Config, t usecase.Translation, uc usecase.UseCases, userJWT *jwt.Service, adminJWT *jwt.Service, l logger.Interface) {
 	// Options
 	app.Use(middleware.Logger(l))
 	app.Use(middleware.Recovery(l))
@@ -46,5 +55,6 @@ func NewRouter(app *fiber.App, cfg *config.Config, t usecase.Translation, l logg
 	apiV1Group := app.Group("/v1")
 	{
 		v1.NewTranslationRoutes(apiV1Group, t, l)
+		v1.RegisterRoutes(apiV1Group, uc, userJWT, adminJWT, l)
 	}
 }

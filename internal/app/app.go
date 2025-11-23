@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/evrone/go-clean-template/config"
 	amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
@@ -14,9 +15,25 @@ import (
 	natsrpc "github.com/evrone/go-clean-template/internal/controller/nats_rpc"
 	"github.com/evrone/go-clean-template/internal/repo/persistent"
 	"github.com/evrone/go-clean-template/internal/repo/webapi"
+	"github.com/evrone/go-clean-template/internal/usecase"
+	"github.com/evrone/go-clean-template/internal/usecase/ai"
+	"github.com/evrone/go-clean-template/internal/usecase/analytics"
+	"github.com/evrone/go-clean-template/internal/usecase/auth"
+	"github.com/evrone/go-clean-template/internal/usecase/coupon"
+	"github.com/evrone/go-clean-template/internal/usecase/exam"
+	"github.com/evrone/go-clean-template/internal/usecase/feed"
+	"github.com/evrone/go-clean-template/internal/usecase/leaderboard"
+	"github.com/evrone/go-clean-template/internal/usecase/podcast"
+	"github.com/evrone/go-clean-template/internal/usecase/practice"
+	"github.com/evrone/go-clean-template/internal/usecase/question"
+	"github.com/evrone/go-clean-template/internal/usecase/referral"
+	"github.com/evrone/go-clean-template/internal/usecase/revision"
 	"github.com/evrone/go-clean-template/internal/usecase/translation"
+	"github.com/evrone/go-clean-template/internal/usecase/user"
+	"github.com/evrone/go-clean-template/internal/usecase/wallet"
 	"github.com/evrone/go-clean-template/pkg/grpcserver"
 	"github.com/evrone/go-clean-template/pkg/httpserver"
+	"github.com/evrone/go-clean-template/pkg/jwt"
 	"github.com/evrone/go-clean-template/pkg/logger"
 	natsRPCServer "github.com/evrone/go-clean-template/pkg/nats/nats_rpc/server"
 	"github.com/evrone/go-clean-template/pkg/postgres"
@@ -34,9 +51,31 @@ func Run(cfg *config.Config) { //nolint: gocyclo,cyclop,funlen,gocritic,nolintli
 	}
 	defer pg.Close()
 
+	repos := persistent.New(pg)
+
+	userJWT := jwt.NewService(cfg.JWT.UserSecret, cfg.App.Name, time.Minute*time.Duration(cfg.JWT.TokenTTLMinutes))
+	adminJWT := jwt.NewService(cfg.JWT.AdminSecret, cfg.App.Name, time.Minute*time.Duration(cfg.JWT.TokenTTLMinutes))
+
 	// Use-Case
+	useCases := usecase.UseCases{
+		Auth:        auth.New(repos.User, userJWT),
+		User:        user.New(repos.User, repos.Subject, repos.Topic),
+		Practice:    practice.New(repos.Practice),
+		Revision:    revision.New(repos.Revision),
+		Question:    question.New(repos.Question),
+		Exam:        exam.New(repos.Exam),
+		Podcast:     podcast.New(repos.Podcast),
+		Wallet:      wallet.New(repos.Wallet),
+		Coupon:      coupon.New(repos.Coupon),
+		Referral:    referral.New(repos.Referral),
+		AI:          ai.New(repos.AI),
+		Analytics:   analytics.New(repos.Analytics),
+		Leaderboard: leaderboard.New(repos.Leaderboard),
+		Feed:        feed.New(repos.Feed),
+	}
+
 	translationUseCase := translation.New(
-		persistent.New(pg),
+		repos.Translation,
 		webapi.New(),
 	)
 
@@ -62,7 +101,7 @@ func Run(cfg *config.Config) { //nolint: gocyclo,cyclop,funlen,gocritic,nolintli
 
 	// HTTP Server
 	httpServer := httpserver.New(l, httpserver.Port(cfg.HTTP.Port), httpserver.Prefork(cfg.HTTP.UsePreforkMode))
-	http.NewRouter(httpServer.App, cfg, translationUseCase, l)
+	http.NewRouter(httpServer.App, cfg, translationUseCase, useCases, userJWT, adminJWT, l)
 
 	// Start servers
 	rmqServer.Start()

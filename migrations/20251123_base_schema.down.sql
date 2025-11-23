@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS user_question_attempt;
+DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS practice_session;
+DROP TABLE IF EXISTS practice_session_question;
+DROP TABLE IF EXISTS question;
+DROP TABLE IF EXISTS topic;
+DROP TABLE IF EXISTS subject;
+DROP TABLE IF EXISTS exam_type_lookup;
+DROP TYPE IF EXISTS question_choice_type;
+DROP TYPE IF EXISTS exam_category;
+DROP EXTENSION IF EXISTS "pgcrypto";

@@ -18,8 +18,8 @@ func registerUserRoutes(api fiber.Router, r *Routes) {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {object} entity.MeResponse
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /me [get]
 func (r *Routes) me(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)
@@ -43,8 +43,8 @@ func (r *Routes) me(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param exam query string false "Exam category"
 // @Success 200 {array} entity.Subject
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /subjects [get]
 func (r *Routes) subjects(ctx *fiber.Ctx) error {
 	var exam *entity.ExamCategory
@@ -68,9 +68,9 @@ func (r *Routes) subjects(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param subjectId query string true "Subject ID"
 // @Success 200 {array} entity.Topic
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /topics [get]
 func (r *Routes) topics(ctx *fiber.Ctx) error {
 	subjectID, err := parseQueryUUID(ctx, "subjectId")

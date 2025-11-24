@@ -17,8 +17,8 @@ func registerAdminAISettingsRoutes(api fiber.Router, r *Routes) {
 // @Security AdminAuth
 // @Produce json
 // @Success 200 {object} entity.AISettings
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/ai-settings [get]
 func (r *Routes) adminGetAISettings(ctx *fiber.Ctx) error {
 	settings, err := r.uc.AI.Get(ctx.UserContext())
@@ -37,9 +37,9 @@ func (r *Routes) adminGetAISettings(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.AISettings true "Settings payload"
 // @Success 200 {object} entity.AISettings
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/ai-settings [put]
 func (r *Routes) adminUpdateAISettings(ctx *fiber.Ctx) error {
 	var payload entity.AISettings

@@ -5,17 +5,22 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
+
+	"github.com/google/uuid"
 
 	"github.com/evrone/go-clean-template/config"
 	amqprpc "github.com/evrone/go-clean-template/internal/controller/amqp_rpc"
 	"github.com/evrone/go-clean-template/internal/controller/grpc"
 	"github.com/evrone/go-clean-template/internal/controller/http"
 	natsrpc "github.com/evrone/go-clean-template/internal/controller/nats_rpc"
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/evrone/go-clean-template/internal/repo/persistent"
 	"github.com/evrone/go-clean-template/internal/repo/webapi"
 	"github.com/evrone/go-clean-template/internal/usecase"
+	"github.com/evrone/go-clean-template/internal/usecase/admin"
 	"github.com/evrone/go-clean-template/internal/usecase/ai"
 	"github.com/evrone/go-clean-template/internal/usecase/analytics"
 	"github.com/evrone/go-clean-template/internal/usecase/auth"
@@ -56,9 +61,70 @@ func Run(cfg *config.Config) { //nolint: gocyclo,cyclop,funlen,gocritic,nolintli
 	userJWT := jwt.NewService(cfg.JWT.UserSecret, cfg.App.Name, time.Minute*time.Duration(cfg.JWT.TokenTTLMinutes))
 	adminJWT := jwt.NewService(cfg.JWT.AdminSecret, cfg.App.Name, time.Minute*time.Duration(cfg.JWT.TokenTTLMinutes))
 
+	adminUserID, err := uuid.Parse(cfg.Admin.UserID)
+	if err != nil {
+		l.Fatal(fmt.Errorf("app - Run - invalid ADMIN_USER_ID: %w", err))
+	}
+
+	adminExam := entity.ExamCategory(cfg.Admin.PrimaryExam)
+	if adminExam == "" {
+		adminExam = entity.ExamCategoryNEETPG
+	}
+
+	adminRole := entity.UserRole(strings.ToUpper(cfg.Admin.Role))
+	switch adminRole {
+	case entity.UserRoleAdmin, entity.UserRoleSuperAdmin:
+	default:
+		adminRole = entity.UserRoleAdmin
+	}
+
+	perms := make([]string, 0, len(cfg.Admin.Permissions))
+	for _, p := range cfg.Admin.Permissions {
+		if trimmed := strings.TrimSpace(p); trimmed != "" {
+			perms = append(perms, trimmed)
+		}
+	}
+	if len(perms) == 0 {
+		perms = []string{"subjects.read", "subjects.write"}
+	}
+
+	adminCreatedAt := time.Now().UTC()
+	if cfg.Admin.CreatedAtISO != "" {
+		if parsed, err := time.Parse(time.RFC3339, cfg.Admin.CreatedAtISO); err == nil {
+			adminCreatedAt = parsed
+		} else {
+			l.Warn("app - Run - invalid ADMIN_CREATED_AT, using now")
+		}
+	}
+
+	adminCreds := auth.AdminCredentials{
+		Username:    cfg.Admin.Username,
+		Password:    cfg.Admin.Password,
+		DisplayName: cfg.Admin.DisplayName,
+		UserID:      adminUserID,
+		PrimaryExam: adminExam,
+		Email:       cfg.Admin.Email,
+		Role:        adminRole,
+		Permissions: perms,
+		CreatedAt:   adminCreatedAt,
+	}
+
+	adminProfile := entity.AdminProfile{
+		ID:          adminUserID,
+		DisplayName: cfg.Admin.DisplayName,
+		Email:       cfg.Admin.Email,
+		Role:        string(adminRole),
+		PrimaryExam: adminExam,
+		CreatedAt:   adminCreatedAt,
+		Permissions: perms,
+	}
+
+	adminUseCase := admin.New(adminProfile)
+
 	// Use-Case
 	useCases := usecase.UseCases{
-		Auth:        auth.New(repos.User, userJWT),
+		Admin:       adminUseCase,
+		Auth:        auth.New(repos.User, userJWT, adminJWT, adminCreds),
 		User:        user.New(repos.User, repos.Subject, repos.Topic),
 		Practice:    practice.New(repos.Practice),
 		Revision:    revision.New(repos.Revision),

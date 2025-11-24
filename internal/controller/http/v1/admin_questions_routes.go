@@ -24,8 +24,8 @@ func registerAdminQuestionRoutes(api fiber.Router, r *Routes) {
 // @Param subjectId query string false "Subject ID"
 // @Param topicId query string false "Topic ID"
 // @Success 200 {array} entity.Question
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/questions [get]
 func (r *Routes) adminListQuestions(ctx *fiber.Ctx) error {
 	filter := repo.QuestionFilter{}
@@ -65,9 +65,9 @@ func (r *Routes) adminListQuestions(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.QuestionCreateRequest true "Question payload"
 // @Success 201 {object} entity.Question
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/questions [post]
 func (r *Routes) adminCreateQuestion(ctx *fiber.Ctx) error {
 	var payload entity.QuestionCreateRequest
@@ -96,9 +96,9 @@ func (r *Routes) adminCreateQuestion(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Question ID"
 // @Success 200 {object} entity.Question
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/questions/{id} [get]
 func (r *Routes) adminGetQuestion(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -124,9 +124,9 @@ func (r *Routes) adminGetQuestion(ctx *fiber.Ctx) error {
 // @Param id path string true "Question ID"
 // @Param request body entity.QuestionUpdateRequest true "Update payload"
 // @Success 200 {object} entity.Question
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/questions/{id} [patch]
 func (r *Routes) adminUpdateQuestion(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -155,8 +155,8 @@ func (r *Routes) adminUpdateQuestion(ctx *fiber.Ctx) error {
 // @Security AdminAuth
 // @Param id path string true "Question ID"
 // @Success 204
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
 // @Router /admin/questions/{id} [delete]
 func (r *Routes) adminDeleteQuestion(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")

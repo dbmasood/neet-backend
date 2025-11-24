@@ -3,8 +3,11 @@ package v1
 import (
 	"net/http"
 
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/gofiber/fiber/v2"
 )
+
+var _ = entity.FeedPost{}
 
 func registerFeedRoutes(api fiber.Router, r *Routes) {
 	api.Get("/feed", r.feed)
@@ -15,7 +18,7 @@ func registerFeedRoutes(api fiber.Router, r *Routes) {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {array} entity.FeedPost
-// @Failure 500 {object} response.Error
+// @Failure 500 {object} ErrorResponse
 // @Router /feed [get]
 func (r *Routes) feed(ctx *fiber.Ctx) error {
 	posts, err := r.uc.Feed.List(ctx.UserContext())

@@ -21,8 +21,8 @@ func registerAdminPodcastsRoutes(api fiber.Router, r *Routes) {
 // @Security AdminAuth
 // @Produce json
 // @Success 200 {array} entity.PodcastEpisode
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/podcasts [get]
 func (r *Routes) adminListPodcasts(ctx *fiber.Ctx) error {
 	episodes, err := r.uc.Podcast.List(ctx.UserContext(), repo.PodcastFilter{})
@@ -41,9 +41,9 @@ func (r *Routes) adminListPodcasts(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.PodcastCreateRequest true "Podcast payload"
 // @Success 201 {object} entity.PodcastEpisode
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/podcasts [post]
 func (r *Routes) adminCreatePodcast(ctx *fiber.Ctx) error {
 	var payload entity.PodcastCreateRequest
@@ -72,9 +72,9 @@ func (r *Routes) adminCreatePodcast(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Episode ID"
 // @Success 200 {object} entity.PodcastEpisode
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/podcasts/{id} [get]
 func (r *Routes) adminGetPodcast(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -100,9 +100,9 @@ func (r *Routes) adminGetPodcast(ctx *fiber.Ctx) error {
 // @Param id path string true "Episode ID"
 // @Param request body entity.PodcastCreateRequest true "Podcast payload"
 // @Success 200 {object} entity.PodcastEpisode
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/podcasts/{id} [patch]
 func (r *Routes) adminUpdatePodcast(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -136,8 +136,8 @@ func (r *Routes) adminUpdatePodcast(ctx *fiber.Ctx) error {
 // @Security AdminAuth
 // @Param id path string true "Episode ID"
 // @Success 204
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
 // @Router /admin/podcasts/{id} [delete]
 func (r *Routes) adminDeletePodcast(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")

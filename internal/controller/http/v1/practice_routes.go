@@ -25,9 +25,9 @@ func registerPracticeRevisionRoutes(api fiber.Router, r *Routes) {
 // @Produce json
 // @Param request body entity.PracticeSessionCreateRequest true "Session payload"
 // @Success 201 {object} entity.PracticeSession
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /practice/sessions [post]
 func (r *Routes) createPracticeSession(ctx *fiber.Ctx) error {
 	var payload entity.PracticeSessionCreateRequest
@@ -62,8 +62,8 @@ func (r *Routes) createPracticeSession(ctx *fiber.Ctx) error {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {array} entity.PracticeSession
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /practice/sessions [get]
 func (r *Routes) listPracticeSessions(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)
@@ -87,9 +87,9 @@ func (r *Routes) listPracticeSessions(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Session ID"
 // @Success 200 {object} entity.PracticeSessionDetail
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /practice/sessions/{id} [get]
 func (r *Routes) getPracticeSession(ctx *fiber.Ctx) error {
 	sessionID, err := parseUUID(ctx, "id")
@@ -121,9 +121,9 @@ func (r *Routes) getPracticeSession(ctx *fiber.Ctx) error {
 // @Param id path string true "Session ID"
 // @Param request body entity.PracticeAnswerRequest true "Answer payload"
 // @Success 200 {object} entity.PracticeSessionQuestion
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /practice/sessions/{id}/answers [post]
 func (r *Routes) answerPracticeQuestion(ctx *fiber.Ctx) error {
 	sessionID, err := parseUUID(ctx, "id")
@@ -163,8 +163,8 @@ func (r *Routes) answerPracticeQuestion(ctx *fiber.Ctx) error {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {array} entity.RevisionItem
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /revision/queue [get]
 func (r *Routes) revisionQueue(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)

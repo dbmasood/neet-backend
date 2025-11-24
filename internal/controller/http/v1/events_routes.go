@@ -3,8 +3,11 @@ package v1
 import (
 	"net/http"
 
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/gofiber/fiber/v2"
 )
+
+var _ = entity.ExamSummary{}
 
 func registerEventsRoutes(api fiber.Router, r *Routes) {
 	api.Get("", r.listEvents)
@@ -15,8 +18,8 @@ func registerEventsRoutes(api fiber.Router, r *Routes) {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {array} entity.ExamSummary
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /events [get]
 func (r *Routes) listEvents(ctx *fiber.Ctx) error {
 	events, err := r.uc.Exam.ListEvents(ctx.UserContext())

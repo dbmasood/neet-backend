@@ -4,8 +4,14 @@ import (
 	"net/http"
 
 	"github.com/evrone/go-clean-template/internal/controller/http/v1/request"
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
+)
+
+var (
+	_ = entity.Subject{}
+	_ = entity.Topic{}
 )
 
 func registerAdminSubjectsTopicsRoutes(api fiber.Router, r *Routes) {
@@ -23,8 +29,8 @@ func registerAdminSubjectsTopicsRoutes(api fiber.Router, r *Routes) {
 // @Security AdminAuth
 // @Produce json
 // @Success 200 {array} entity.Subject
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/subjects [get]
 func (r *Routes) adminListSubjects(ctx *fiber.Ctx) error {
 	subjects, err := r.uc.User.ListSubjects(ctx.UserContext(), nil)
@@ -43,9 +49,9 @@ func (r *Routes) adminListSubjects(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body request.AdminSubjectCreateRequest true "Subject payload"
 // @Success 201 {object} entity.Subject
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/subjects [post]
 func (r *Routes) adminCreateSubject(ctx *fiber.Ctx) error {
 	var payload request.AdminSubjectCreateRequest
@@ -74,8 +80,8 @@ func (r *Routes) adminCreateSubject(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param subjectId query string false "Subject ID"
 // @Success 200 {array} entity.Topic
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/topics [get]
 func (r *Routes) adminListTopics(ctx *fiber.Ctx) error {
 	subjectID, err := parseQueryUUID(ctx, "subjectId")
@@ -105,9 +111,9 @@ func (r *Routes) adminListTopics(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body request.AdminTopicCreateRequest true "Topic payload"
 // @Success 201 {object} entity.Topic
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/topics [post]
 func (r *Routes) adminCreateTopic(ctx *fiber.Ctx) error {
 	var payload request.AdminTopicCreateRequest

@@ -1,6 +1,41 @@
-basePath: /v1
 definitions:
-  entity.AISettings:
+  github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminSubjectCreateRequest:
+    properties:
+      exam:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
+      name:
+        type: string
+    required:
+    - exam
+    - name
+    type: object
+  github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminTopicCreateRequest:
+    properties:
+      name:
+        type: string
+      subjectId:
+        type: string
+    required:
+    - name
+    - subjectId
+    type: object
+  github_com_evrone_go-clean-template_internal_controller_http_v1_request.Translate:
+    properties:
+      destination:
+        example: en
+        type: string
+      original:
+        example: текст для перевода
+        type: string
+      source:
+        example: auto
+        type: string
+    required:
+    - destination
+    - original
+    - source
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AISettings:
     properties:
       includeGuessedCorrect:
         type: boolean
@@ -17,7 +52,235 @@ definitions:
       weaknessThresholdPercent:
         type: integer
     type: object
-  entity.AnalyticsOverview:
+  github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteRequest:
+    properties:
+      userIds:
+        items:
+          type: string
+        minItems: 1
+        type: array
+    required:
+    - userIds
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteResponse:
+    properties:
+      deleted:
+        type: integer
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusRequest:
+    properties:
+      status:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus'
+      userIds:
+        items:
+          type: string
+        minItems: 1
+        type: array
+    required:
+    - status
+    - userIds
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusResponse:
+    properties:
+      updated:
+        type: integer
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminEventSummary:
+    properties:
+      exam:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
+      id:
+        type: string
+      name:
+        type: string
+      registeredCount:
+        type: integer
+      startAt:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus'
+      type:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType'
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminEventsResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminEventSummary'
+        type: array
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminInviteRequest:
+    properties:
+      email:
+        type: string
+      message:
+        type: string
+      role:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole'
+    required:
+    - email
+    - role
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminInviteResponse:
+    properties:
+      expiresAt:
+        type: string
+      invited:
+        type: boolean
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminProfile:
+    properties:
+      createdAt:
+        type: string
+      displayName:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      primaryExam:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
+      role:
+        type: string
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminReferralSummary:
+    properties:
+      newUsers:
+        type: integer
+      range:
+        type: string
+      rewardsPaid:
+        type: integer
+      totalReferrals:
+        type: integer
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminUser:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+      role:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole'
+      status:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus'
+      updatedAt:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminUserCreateRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      role:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole'
+      status:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus'
+      username:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    - phoneNumber
+    - role
+    - status
+    - username
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminUserList:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser'
+        type: array
+      meta:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUsersMeta'
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminUserRole:
+    enum:
+    - superadmin
+    - admin
+    - manager
+    - cashier
+    type: string
+    x-enum-varnames:
+    - AdminUserRoleSuperAdmin
+    - AdminUserRoleAdmin
+    - AdminUserRoleManager
+    - AdminUserRoleCashier
+  github_com_evrone_go-clean-template_internal_entity.AdminUserStatus:
+    enum:
+    - active
+    - inactive
+    - invited
+    - suspended
+    type: string
+    x-enum-varnames:
+    - AdminUserStatusActive
+    - AdminUserStatusInactive
+    - AdminUserStatusInvited
+    - AdminUserStatusSuspended
+  github_com_evrone_go-clean-template_internal_entity.AdminUserUpdateRequest:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      role:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole'
+      status:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus'
+      username:
+        type: string
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AdminUsersMeta:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AnalyticsOverview:
     properties:
       activeUsers:
         type: integer
@@ -32,14 +295,34 @@ definitions:
       totalUsers:
         type: integer
     type: object
-  entity.AuthResponse:
+  github_com_evrone_go-clean-template_internal_entity.AnalyticsPoint:
+    properties:
+      date:
+        type: string
+      value:
+        type: integer
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AnalyticsTimeSeries:
+    properties:
+      exam:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
+      metric:
+        type: string
+      points:
+        items:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsPoint'
+        type: array
+      range:
+        type: string
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.AuthResponse:
     properties:
       accessToken:
         type: string
       user:
-        $ref: '#/definitions/entity.User'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.User'
     type: object
-  entity.Coupon:
+  github_com_evrone_go-clean-template_internal_entity.Coupon:
     properties:
       amount:
         type: integer
@@ -60,7 +343,7 @@ definitions:
       type:
         type: string
     type: object
-  entity.CouponCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest:
     properties:
       amount:
         type: integer
@@ -82,14 +365,14 @@ definitions:
     - code
     - type
     type: object
-  entity.CouponRedeemRequest:
+  github_com_evrone_go-clean-template_internal_entity.CouponRedeemRequest:
     properties:
       code:
         type: string
     required:
     - code
     type: object
-  entity.ExamCategory:
+  github_com_evrone_go-clean-template_internal_entity.ExamCategory:
     enum:
     - NEET_PG
     - NEET_UG
@@ -101,14 +384,14 @@ definitions:
     - ExamCategoryNEETUG
     - ExamCategoryJEE
     - ExamCategoryUPSC
-  entity.ExamConfig:
+  github_com_evrone_go-clean-template_internal_entity.ExamConfig:
     properties:
       description:
         type: string
       entryFee:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       id:
         type: string
       marksPerCorrect:
@@ -124,20 +407,20 @@ definitions:
       scheduleStartAt:
         type: string
       status:
-        $ref: '#/definitions/entity.ExamStatus'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus'
       timeLimitMinutes:
         type: integer
       type:
-        $ref: '#/definitions/entity.ExamConfigType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType'
     type: object
-  entity.ExamConfigCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.ExamConfigCreateRequest:
     properties:
       description:
         type: string
       entryFee:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       marksPerCorrect:
         type: number
       name:
@@ -153,7 +436,7 @@ definitions:
       timeLimitMinutes:
         type: integer
       type:
-        $ref: '#/definitions/entity.ExamConfigType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType'
     required:
     - exam
     - name
@@ -161,7 +444,7 @@ definitions:
     - timeLimitMinutes
     - type
     type: object
-  entity.ExamConfigType:
+  github_com_evrone_go-clean-template_internal_entity.ExamConfigType:
     enum:
     - MOCK
     - SUBJECT_TEST
@@ -173,7 +456,7 @@ definitions:
     - ExamTypeSubjectTest
     - ExamTypeRewardEvent
     - ExamTypeDailyTest
-  entity.ExamConfigUpdateRequest:
+  github_com_evrone_go-clean-template_internal_entity.ExamConfigUpdateRequest:
     properties:
       description:
         type: string
@@ -192,18 +475,18 @@ definitions:
       scheduleStartAt:
         type: string
       status:
-        $ref: '#/definitions/entity.ExamStatus'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus'
       timeLimitMinutes:
         type: integer
       type:
-        $ref: '#/definitions/entity.ExamConfigType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType'
     type: object
-  entity.ExamProfile:
+  github_com_evrone_go-clean-template_internal_entity.ExamProfile:
     properties:
       currentStreakDays:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       lastLoginAt:
         type: string
       longestStreakDays:
@@ -217,7 +500,7 @@ definitions:
       totalTimeSeconds:
         type: integer
     type: object
-  entity.ExamStatus:
+  github_com_evrone_go-clean-template_internal_entity.ExamStatus:
     enum:
     - DRAFT
     - SCHEDULED
@@ -229,18 +512,18 @@ definitions:
     - ExamStatusScheduled
     - ExamStatusOngoing
     - ExamStatusCompleted
-  entity.ExamSummary:
+  github_com_evrone_go-clean-template_internal_entity.ExamSummary:
     properties:
       bestScore:
         type: number
       config:
-        $ref: '#/definitions/entity.ExamConfig'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig'
       isCompleted:
         type: boolean
       isRegistered:
         type: boolean
     type: object
-  entity.FeedPost:
+  github_com_evrone_go-clean-template_internal_entity.FeedPost:
     properties:
       author:
         type: string
@@ -269,7 +552,7 @@ definitions:
       type:
         type: string
     type: object
-  entity.LeaderboardEntry:
+  github_com_evrone_go-clean-template_internal_entity.LeaderboardEntry:
     properties:
       avatarUrl:
         type: string
@@ -288,7 +571,7 @@ definitions:
       totalCorrect:
         type: integer
     type: object
-  entity.LeaderboardStats:
+  github_com_evrone_go-clean-template_internal_entity.LeaderboardStats:
     properties:
       averageAccuracy:
         type: number
@@ -297,14 +580,14 @@ definitions:
       totalUsers:
         type: integer
     type: object
-  entity.MeResponse:
+  github_com_evrone_go-clean-template_internal_entity.MeResponse:
     properties:
       examProfile:
-        $ref: '#/definitions/entity.ExamProfile'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamProfile'
       user:
-        $ref: '#/definitions/entity.User'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.User'
     type: object
-  entity.PodcastCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest:
     properties:
       audioUrl:
         type: string
@@ -313,7 +596,7 @@ definitions:
       durationSeconds:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       isActive:
         type: boolean
       subjectId:
@@ -331,7 +614,7 @@ definitions:
     - exam
     - title
     type: object
-  entity.PodcastEpisode:
+  github_com_evrone_go-clean-template_internal_entity.PodcastEpisode:
     properties:
       audioUrl:
         type: string
@@ -340,7 +623,7 @@ definitions:
       durationSeconds:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       id:
         type: string
       isActive:
@@ -356,7 +639,7 @@ definitions:
       topicId:
         type: string
     type: object
-  entity.PracticeAnswerRequest:
+  github_com_evrone_go-clean-template_internal_entity.PracticeAnswerRequest:
     properties:
       selectedOption:
         type: integer
@@ -368,7 +651,7 @@ definitions:
     - selectedOption
     - sessionQuestionId
     type: object
-  entity.PracticeMode:
+  github_com_evrone_go-clean-template_internal_entity.PracticeMode:
     enum:
     - smart
     - custom
@@ -380,33 +663,33 @@ definitions:
     - PracticeModeCustom
     - PracticeModeRevision
     - PracticeModeExam
-  entity.PracticeSession:
+  github_com_evrone_go-clean-template_internal_entity.PracticeSession:
     properties:
       completedAt:
         type: string
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       id:
         type: string
       mode:
-        $ref: '#/definitions/entity.PracticeMode'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeMode'
       startedAt:
         type: string
       status:
-        $ref: '#/definitions/entity.PracticeSessionStatus'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionStatus'
       totalQuestionsPlanned:
         type: integer
     type: object
-  entity.PracticeSessionCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.PracticeSessionCreateRequest:
     properties:
       difficultyLevels:
         items:
           type: integer
         type: array
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       mode:
-        $ref: '#/definitions/entity.PracticeMode'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeMode'
       numQuestions:
         type: integer
       subjectIds:
@@ -422,23 +705,25 @@ definitions:
     required:
     - mode
     type: object
-  entity.PracticeSessionDetail:
+  github_com_evrone_go-clean-template_internal_entity.PracticeSessionDetail:
     properties:
       questions:
         items:
-          $ref: '#/definitions/entity.PracticeSessionQuestion'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion'
         type: array
       session:
-        $ref: '#/definitions/entity.PracticeSession'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession'
     type: object
-  entity.PracticeSessionQuestion:
+  github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion:
     properties:
+      answeredAt:
+        type: string
       id:
         type: string
       isCorrect:
         type: boolean
       question:
-        $ref: '#/definitions/entity.Question'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
       selectedOption:
         type: integer
       sequenceIndex:
@@ -446,7 +731,7 @@ definitions:
       timeTakenMs:
         type: integer
     type: object
-  entity.PracticeSessionStatus:
+  github_com_evrone_go-clean-template_internal_entity.PracticeSessionStatus:
     enum:
     - in_progress
     - completed
@@ -456,16 +741,16 @@ definitions:
     - PracticeStatusInProgress
     - PracticeStatusCompleted
     - PracticeStatusAbandoned
-  entity.Question:
+  github_com_evrone_go-clean-template_internal_entity.Question:
     properties:
       choiceType:
-        $ref: '#/definitions/entity.QuestionChoiceType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType'
       correctOption:
         type: integer
       difficultyLevel:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       explanation:
         type: string
       id:
@@ -493,7 +778,7 @@ definitions:
       topicId:
         type: string
     type: object
-  entity.QuestionChoiceType:
+  github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType:
     enum:
     - single
     - multi
@@ -501,10 +786,10 @@ definitions:
     x-enum-varnames:
     - ChoiceTypeSingle
     - ChoiceTypeMulti
-  entity.QuestionCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.QuestionCreateRequest:
     properties:
       choiceType:
-        $ref: '#/definitions/entity.QuestionChoiceType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType'
       correctOption:
         maximum: 4
         minimum: 1
@@ -512,7 +797,7 @@ definitions:
       difficultyLevel:
         type: integer
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       explanation:
         type: string
       isActive:
@@ -548,10 +833,10 @@ definitions:
     - subjectId
     - topicId
     type: object
-  entity.QuestionUpdateRequest:
+  github_com_evrone_go-clean-template_internal_entity.QuestionUpdateRequest:
     properties:
       choiceType:
-        $ref: '#/definitions/entity.QuestionChoiceType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType'
       correctOption:
         type: integer
       difficultyLevel:
@@ -581,7 +866,7 @@ definitions:
       topicId:
         type: string
     type: object
-  entity.ReferralSummary:
+  github_com_evrone_go-clean-template_internal_entity.ReferralSummary:
     properties:
       activated:
         type: integer
@@ -594,7 +879,7 @@ definitions:
       totalInvited:
         type: integer
     type: object
-  entity.RevisionItem:
+  github_com_evrone_go-clean-template_internal_entity.RevisionItem:
     properties:
       id:
         type: string
@@ -603,14 +888,14 @@ definitions:
       nextReviewAt:
         type: string
       question:
-        $ref: '#/definitions/entity.Question'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
       timesReviewed:
         type: integer
     type: object
-  entity.Subject:
+  github_com_evrone_go-clean-template_internal_entity.Subject:
     properties:
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       id:
         type: string
       isActive:
@@ -618,19 +903,37 @@ definitions:
       name:
         type: string
     type: object
-  entity.TelegramAuthRequest:
+  github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyItem:
+    properties:
+      accuracy:
+        type: number
+      subjectId:
+        type: string
+      subjectName:
+        type: string
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyResponse:
+    properties:
+      exam:
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
+      subjects:
+        items:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyItem'
+        type: array
+    type: object
+  github_com_evrone_go-clean-template_internal_entity.TelegramAuthRequest:
     properties:
       displayName:
         type: string
       exam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       telegramId:
         type: string
     required:
     - exam
     - telegramId
     type: object
-  entity.Topic:
+  github_com_evrone_go-clean-template_internal_entity.Topic:
     properties:
       id:
         type: string
@@ -641,7 +944,7 @@ definitions:
       subjectId:
         type: string
     type: object
-  entity.Translation:
+  github_com_evrone_go-clean-template_internal_entity.Translation:
     properties:
       destination:
         example: en
@@ -656,14 +959,14 @@ definitions:
         example: text for translation
         type: string
     type: object
-  entity.TranslationHistory:
+  github_com_evrone_go-clean-template_internal_entity.TranslationHistory:
     properties:
       history:
         items:
-          $ref: '#/definitions/entity.Translation'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Translation'
         type: array
     type: object
-  entity.User:
+  github_com_evrone_go-clean-template_internal_entity.User:
     properties:
       createdAt:
         type: string
@@ -674,13 +977,13 @@ definitions:
       id:
         type: string
       primaryExam:
-        $ref: '#/definitions/entity.ExamCategory'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory'
       role:
-        $ref: '#/definitions/entity.UserRole'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.UserRole'
       telegramId:
         type: string
     type: object
-  entity.UserRole:
+  github_com_evrone_go-clean-template_internal_entity.UserRole:
     enum:
     - USER
     - ADMIN
@@ -690,7 +993,7 @@ definitions:
     - UserRoleUser
     - UserRoleAdmin
     - UserRoleSuperAdmin
-  entity.WalletSummary:
+  github_com_evrone_go-clean-template_internal_entity.WalletSummary:
     properties:
       balance:
         type: integer
@@ -699,7 +1002,7 @@ definitions:
       lifetimeSpent:
         type: integer
     type: object
-  entity.WalletTransaction:
+  github_com_evrone_go-clean-template_internal_entity.WalletTransaction:
     properties:
       amount:
         type: integer
@@ -710,9 +1013,9 @@ definitions:
       id:
         type: string
       type:
-        $ref: '#/definitions/entity.WalletTxType'
+        $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletTxType'
     type: object
-  entity.WalletTxType:
+  github_com_evrone_go-clean-template_internal_entity.WalletTxType:
     enum:
     - REWARD
     - EXAM_ENTRY
@@ -730,54 +1033,36 @@ definitions:
     - WalletTxReferral
     - WalletTxSpin
     - WalletTxBonus
-  request.AdminSubjectCreateRequest:
+  github_com_evrone_go-clean-template_internal_entity.WeakTopicItem:
     properties:
-      exam:
-        $ref: '#/definitions/entity.ExamCategory'
-      name:
-        type: string
-    required:
-    - exam
-    - name
-    type: object
-  request.AdminTopicCreateRequest:
-    properties:
-      name:
-        type: string
+      accuracy:
+        type: number
+      attempts:
+        type: integer
       subjectId:
         type: string
-    required:
-    - name
-    - subjectId
+      subjectName:
+        type: string
+      topicId:
+        type: string
+      topicName:
+        type: string
     type: object
-  request.Translate:
+  github_com_evrone_go-clean-template_internal_entity.WeakTopicsResponse:
     properties:
-      destination:
-        example: en
-        type: string
-      original:
-        example: текст для перевода
-        type: string
-      source:
-        example: auto
-        type: string
-    required:
-    - destination
-    - original
-    - source
+      items:
+        items:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WeakTopicItem'
+        type: array
     type: object
-  response.Error:
+  internal_controller_http_v1.ErrorResponse:
     properties:
       error:
         example: message
         type: string
     type: object
-host: localhost:8080
 info:
   contact: {}
-  description: Using a translation service as an example
-  title: Go Clean Template API
-  version: "1.0"
 paths:
   /admin/ai-settings:
     get:
@@ -787,15 +1072,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.AISettings'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Get AI settings
@@ -810,26 +1095,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.AISettings'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.AISettings'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Update AI settings
@@ -852,18 +1137,116 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.AnalyticsOverview'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsOverview'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Analytics overview
+      tags:
+      - 'Admin: Analytics'
+  /admin/analytics/subject-accuracy:
+    get:
+      parameters:
+      - description: Exam
+        in: query
+        name: exam
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Subject accuracy
+      tags:
+      - 'Admin: Analytics'
+  /admin/analytics/time-series:
+    get:
+      parameters:
+      - description: Metric (active_users|questions_answered)
+        in: query
+        name: metric
+        required: true
+        type: string
+      - description: Exam
+        in: query
+        name: exam
+        type: string
+      - description: today|7d|30d
+        in: query
+        name: range
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsTimeSeries'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Analytics time series
+      tags:
+      - 'Admin: Analytics'
+  /admin/analytics/weak-topics:
+    get:
+      parameters:
+      - description: Exam
+        in: query
+        name: exam
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WeakTopicsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Weak topics
       tags:
       - 'Admin: Analytics'
   /admin/coupons:
@@ -875,16 +1258,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Coupon'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List coupons
@@ -899,26 +1282,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.CouponCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.Coupon'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create coupon
@@ -938,11 +1321,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Delete coupon
@@ -961,19 +1344,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Coupon'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Get coupon
@@ -993,33 +1376,65 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.CouponCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Coupon'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Update coupon
       tags:
       - 'Admin: Coupons'
+  /admin/events/upcoming:
+    get:
+      parameters:
+      - description: Exam
+        in: query
+        name: exam
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminEventsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Upcoming events
+      tags:
+      - 'Admin: Events'
   /admin/exams:
     get:
+      parameters:
+      - description: Exam
+        in: query
+        name: exam
+        type: string
       produces:
       - application/json
       responses:
@@ -1027,16 +1442,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.ExamConfig'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List exam configs
@@ -1051,26 +1466,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.ExamConfigCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.ExamConfig'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create exam config
@@ -1090,11 +1505,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Delete exam config
@@ -1113,19 +1528,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.ExamConfig'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Get exam config
@@ -1145,26 +1560,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.ExamConfigUpdateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigUpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.ExamConfig'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Update exam config
@@ -1179,16 +1594,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.PodcastEpisode'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List podcasts
@@ -1203,26 +1618,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.PodcastCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.PodcastEpisode'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create podcast episode
@@ -1242,11 +1657,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Delete podcast episode
@@ -1265,19 +1680,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.PodcastEpisode'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Get podcast episode
@@ -1297,26 +1712,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.PodcastCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.PodcastEpisode'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Update podcast episode
@@ -1344,16 +1759,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Question'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List questions
@@ -1368,26 +1783,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.QuestionCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.Question'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create question
@@ -1407,11 +1822,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Delete question
@@ -1430,19 +1845,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Question'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Get question
@@ -1462,31 +1877,58 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.QuestionUpdateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionUpdateRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Question'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Question'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Update question
       tags:
       - 'Admin: Questions'
+  /admin/referrals/summary:
+    get:
+      parameters:
+      - description: today|7d|30d
+        in: query
+        name: range
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminReferralSummary'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Referral summary
+      tags:
+      - 'Admin: Referrals'
   /admin/subjects:
     get:
       produces:
@@ -1496,16 +1938,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Subject'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List subjects
@@ -1520,26 +1962,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/request.AdminSubjectCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminSubjectCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.Subject'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create subject
@@ -1559,16 +2001,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Topic'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: List topics
@@ -1583,31 +2025,323 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/request.AdminTopicCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminTopicCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.Topic'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - AdminAuth: []
       summary: Create topic
       tags:
       - 'Admin: Topics'
+  /admin/users:
+    get:
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      - description: Comma separated statuses
+        in: query
+        name: status
+        type: string
+      - description: Role
+        in: query
+        name: role
+        type: string
+      - description: Username search
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserList'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: List admin users
+      tags:
+      - 'Admin: Users'
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Create admin user
+      tags:
+      - 'Admin: Users'
+  /admin/users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Delete admin user
+      tags:
+      - 'Admin: Users'
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Update admin user
+      tags:
+      - 'Admin: Users'
+  /admin/users/bulk-delete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Bulk delete payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Bulk delete users
+      tags:
+      - 'Admin: Users'
+  /admin/users/bulk-status:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Bulk status payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Bulk status update
+      tags:
+      - 'Admin: Users'
+  /admin/users/invite:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Invite payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminInviteRequest'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminInviteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Invite admin user
+      tags:
+      - 'Admin: Users'
+  /auth/admin/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Admin credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      summary: Login as admin
+      tags:
+      - Auth
+  /auth/admin/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminProfile'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
+      security:
+      - AdminAuth: []
+      summary: Admin profile
+      tags:
+      - Auth
   /auth/telegram:
     post:
       consumes:
@@ -1618,22 +2352,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.TelegramAuthRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.TelegramAuthRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.AuthResponse'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.AuthResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       summary: Login or signup via Telegram
       tags:
       - Auth
@@ -1647,26 +2381,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.CouponRedeemRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponRedeemRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.WalletSummary'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletSummary'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Redeem coupon code
@@ -1681,16 +2415,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.ExamSummary'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamSummary'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: List exams/events
@@ -1705,12 +2439,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.FeedPost'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.FeedPost'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Feed posts
@@ -1731,12 +2465,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.LeaderboardEntry'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.LeaderboardEntry'
             type: array
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Leaderboard
@@ -1750,15 +2484,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.MeResponse'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.MeResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Get current user and profile
@@ -1782,16 +2516,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.PodcastEpisode'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: List podcast episodes
@@ -1811,19 +2545,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.PodcastEpisode'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Get podcast episode
@@ -1838,16 +2572,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.PracticeSession'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: List practice sessions
@@ -1862,26 +2596,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.PracticeSessionCreateRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionCreateRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/entity.PracticeSession'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Create new practice session
@@ -1901,19 +2635,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.PracticeSessionDetail'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionDetail'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Get practice session detail
@@ -1934,26 +2668,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/entity.PracticeAnswerRequest'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeAnswerRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.PracticeSessionQuestion'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Submit practice answer
@@ -1967,15 +2701,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.ReferralSummary'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.ReferralSummary'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Referral summary
@@ -1990,16 +2724,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.RevisionItem'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.RevisionItem'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Get revision queue
@@ -2019,16 +2753,16 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Subject'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: List subjects for current exam
@@ -2049,20 +2783,20 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.Topic'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: List topics for subject
@@ -2080,22 +2814,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/request.Translate'
+          $ref: '#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.Translate'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.Translation'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.Translation'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       summary: Translate
       tags:
       - translation
@@ -2111,11 +2845,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.TranslationHistory'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.TranslationHistory'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       summary: Show history
       tags:
       - translation
@@ -2127,15 +2861,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entity.WalletSummary'
+            $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletSummary'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Wallet summary for current user
@@ -2150,30 +2884,19 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.WalletTransaction'
+              $ref: '#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletTransaction'
             type: array
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/response.Error'
+            $ref: '#/definitions/internal_controller_http_v1.ErrorResponse'
       security:
       - UserAuth: []
       summary: Wallet transactions
       tags:
       - 'App: Wallet'
-securityDefinitions:
-  AdminAuth:
-    description: 'Bearer Auth for admins (format: Bearer {token})'
-    in: header
-    name: Authorization
-    type: apiKey
-  UserAuth:
-    description: 'Bearer Auth for users (format: Bearer {token})'
-    in: header
-    name: Authorization
-    type: apiKey
 swagger: "2.0"

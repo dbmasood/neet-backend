@@ -19,12 +19,19 @@ func registerAdminExamsRoutes(api fiber.Router, r *Routes) {
 // @Tags Admin: Exams
 // @Security AdminAuth
 // @Produce json
+// @Param exam query string false "Exam"
 // @Success 200 {array} entity.ExamConfig
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/exams [get]
 func (r *Routes) adminListExams(ctx *fiber.Ctx) error {
-	configs, err := r.uc.Exam.AdminList(ctx.UserContext())
+	var exam *entity.ExamCategory
+	if value := ctx.Query("exam"); value != "" {
+		parsed := entity.ExamCategory(value)
+		exam = &parsed
+	}
+
+	configs, err := r.uc.Exam.AdminList(ctx.UserContext(), exam)
 	if err != nil {
 		r.l.Error(err, "http - v1 - adminListExams")
 		return errorResponse(ctx, http.StatusInternalServerError, "unable to list exams")
@@ -40,9 +47,9 @@ func (r *Routes) adminListExams(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.ExamConfigCreateRequest true "Exam payload"
 // @Success 201 {object} entity.ExamConfig
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/exams [post]
 func (r *Routes) adminCreateExam(ctx *fiber.Ctx) error {
 	var payload entity.ExamConfigCreateRequest
@@ -71,9 +78,9 @@ func (r *Routes) adminCreateExam(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Exam ID"
 // @Success 200 {object} entity.ExamConfig
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/exams/{id} [get]
 func (r *Routes) adminGetExam(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -99,9 +106,9 @@ func (r *Routes) adminGetExam(ctx *fiber.Ctx) error {
 // @Param id path string true "Exam ID"
 // @Param request body entity.ExamConfigUpdateRequest true "Exam update"
 // @Success 200 {object} entity.ExamConfig
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/exams/{id} [patch]
 func (r *Routes) adminUpdateExam(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -130,8 +137,8 @@ func (r *Routes) adminUpdateExam(ctx *fiber.Ctx) error {
 // @Security AdminAuth
 // @Param id path string true "Exam ID"
 // @Success 204
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
 // @Router /admin/exams/{id} [delete]
 func (r *Routes) adminDeleteExam(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")

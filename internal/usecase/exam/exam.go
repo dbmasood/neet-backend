@@ -1,13 +1,13 @@
 package exam
 
 import (
-    "context"
-    "fmt"
+	"context"
+	"fmt"
 
-    "github.com/google/uuid"
+	"github.com/google/uuid"
 
-    "github.com/evrone/go-clean-template/internal/entity"
-    "github.com/evrone/go-clean-template/internal/repo"
+	"github.com/evrone/go-clean-template/internal/entity"
+	"github.com/evrone/go-clean-template/internal/repo"
 )
 
 // UseCase manages exam config.
@@ -20,14 +20,25 @@ func New(repo repo.ExamRepository) *UseCase {
 	return &UseCase{repo: repo}
 }
 
-// AdminList returns configs.
-func (uc *UseCase) AdminList(ctx context.Context) ([]entity.ExamConfig, error) {
+// AdminList returns configs with optional exam filter.
+func (uc *UseCase) AdminList(ctx context.Context, exam *entity.ExamCategory) ([]entity.ExamConfig, error) {
 	configs, err := uc.repo.ListConfigs(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("exam - ListConfigs: %w", err)
 	}
 
-	return configs, nil
+	if exam == nil || *exam == "" {
+		return configs, nil
+	}
+
+	filtered := make([]entity.ExamConfig, 0, len(configs))
+	for _, cfg := range configs {
+		if cfg.Exam == *exam {
+			filtered = append(filtered, cfg)
+		}
+	}
+
+	return filtered, nil
 }
 
 // AdminCreate stores a config.

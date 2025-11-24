@@ -4,7 +4,13 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/gofiber/fiber/v2"
+)
+
+var (
+	_ = entity.LeaderboardEntry{}
+	_ = entity.LeaderboardStats{}
 )
 
 func registerLeaderboardRoutes(api fiber.Router, r *Routes) {
@@ -18,7 +24,7 @@ func registerLeaderboardRoutes(api fiber.Router, r *Routes) {
 // @Param limit query int false "Max entries" default(20)
 // @Success 200 {object} entity.LeaderboardStats
 // @Success 200 {array} entity.LeaderboardEntry
-// @Failure 500 {object} response.Error
+// @Failure 500 {object} ErrorResponse
 // @Router /leaderboard [get]
 func (r *Routes) leaderboard(ctx *fiber.Ctx) error {
 	limit := 20

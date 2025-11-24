@@ -27,6 +27,10 @@ func RegisterRoutes(api fiber.Router, uc usecase.UseCases, userJWT, adminJWT *jw
 	authGroup := api.Group("/auth")
 	registerAuthRoutes(authGroup, r)
 
+	adminAuthGroup := authGroup.Group("/admin")
+	adminAuthGroup.Use(middleware.AdminAuth(adminJWT))
+	registerAdminAuthRoutes(adminAuthGroup, r)
+
 	userGroup := api.Group("/")
 	userGroup.Use(middleware.UserAuth(userJWT))
 	registerUserRoutes(userGroup, r)
@@ -61,6 +65,9 @@ func RegisterRoutes(api fiber.Router, uc usecase.UseCases, userJWT, adminJWT *jw
 	registerAdminCouponsRoutes(adminGroup.Group("/coupons"), r)
 	registerAdminAISettingsRoutes(adminGroup.Group("/ai-settings"), r)
 	registerAdminAnalyticsRoutes(adminGroup.Group("/analytics"), r)
+	registerAdminEventsRoutes(adminGroup.Group("/events"), r)
+	registerAdminReferralRoutes(adminGroup.Group("/referrals"), r)
+	registerAdminUsersRoutes(adminGroup.Group("/users"), r)
 }
 
 func (r *Routes) getUserID(ctx *fiber.Ctx) (uuid.UUID, error) {

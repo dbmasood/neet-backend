@@ -33,19 +33,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.AISettings"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -73,7 +73,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.AISettings"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings"
                         }
                     }
                 ],
@@ -81,25 +81,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.AISettings"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AISettings"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -137,19 +137,176 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.AnalyticsOverview"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsOverview"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/analytics/subject-accuracy": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Analytics"
+                ],
+                "summary": "Subject accuracy",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam",
+                        "name": "exam",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/analytics/time-series": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Analytics"
+                ],
+                "summary": "Analytics time series",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Metric (active_users|questions_answered)",
+                        "name": "metric",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Exam",
+                        "name": "exam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "today|7d|30d",
+                        "name": "range",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsTimeSeries"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/analytics/weak-topics": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Analytics"
+                ],
+                "summary": "Weak topics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam",
+                        "name": "exam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WeakTopicsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -175,20 +332,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Coupon"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -216,7 +373,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.CouponCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest"
                         }
                     }
                 ],
@@ -224,25 +381,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.Coupon"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -275,25 +432,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Coupon"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -324,13 +481,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -365,7 +522,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.CouponCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest"
                         }
                     }
                 ],
@@ -373,25 +530,69 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Coupon"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Coupon"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/events/upcoming": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Events"
+                ],
+                "summary": "Upcoming events",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam",
+                        "name": "exam",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminEventsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -411,26 +612,34 @@ const docTemplate = `{
                     "Admin: Exams"
                 ],
                 "summary": "List exam configs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam",
+                        "name": "exam",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.ExamConfig"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -458,7 +667,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.ExamConfigCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigCreateRequest"
                         }
                     }
                 ],
@@ -466,25 +675,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.ExamConfig"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -517,25 +726,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.ExamConfig"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -566,13 +775,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -607,7 +816,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.ExamConfigUpdateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigUpdateRequest"
                         }
                     }
                 ],
@@ -615,25 +824,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.ExamConfig"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -659,20 +868,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.PodcastEpisode"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -700,7 +909,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest"
                         }
                     }
                 ],
@@ -708,25 +917,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastEpisode"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -759,25 +968,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastEpisode"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -808,13 +1017,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -849,7 +1058,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest"
                         }
                     }
                 ],
@@ -857,25 +1066,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastEpisode"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -921,20 +1130,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Question"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -962,7 +1171,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.QuestionCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionCreateRequest"
                         }
                     }
                 ],
@@ -970,25 +1179,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.Question"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1021,25 +1230,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Question"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1070,13 +1279,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1111,7 +1320,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.QuestionUpdateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionUpdateRequest"
                         }
                     }
                 ],
@@ -1119,25 +1328,69 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Question"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/referrals/summary": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Referrals"
+                ],
+                "summary": "Referral summary",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "today|7d|30d",
+                        "name": "range",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminReferralSummary"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1163,20 +1416,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Subject"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1204,7 +1457,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AdminSubjectCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminSubjectCreateRequest"
                         }
                     }
                 ],
@@ -1212,25 +1465,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.Subject"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1264,20 +1517,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Topic"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1305,7 +1558,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AdminTopicCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminTopicCreateRequest"
                         }
                     }
                 ],
@@ -1313,25 +1566,490 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.Topic"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "List admin users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma separated statuses",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Role",
+                        "name": "role",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Username search",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserList"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Create admin user",
+                "parameters": [
+                    {
+                        "description": "User payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/bulk-delete": {
+            "post": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Bulk delete users",
+                "parameters": [
+                    {
+                        "description": "Bulk delete payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/bulk-status": {
+            "post": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Bulk status update",
+                "parameters": [
+                    {
+                        "description": "Bulk status payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/invite": {
+            "post": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Invite admin user",
+                "parameters": [
+                    {
+                        "description": "Invite payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminInviteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminInviteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Delete admin user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin: Users"
+                ],
+                "summary": "Update admin user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/admin/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login as admin",
+                "parameters": [
+                    {
+                        "description": "Admin credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/admin/me": {
+            "get": {
+                "security": [
+                    {
+                        "AdminAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Admin profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminProfile"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1356,7 +2074,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.TelegramAuthRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.TelegramAuthRequest"
                         }
                     }
                 ],
@@ -1364,19 +2082,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.AuthResponse"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AuthResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1406,7 +2124,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.CouponRedeemRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.CouponRedeemRequest"
                         }
                     }
                 ],
@@ -1414,25 +2132,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.WalletSummary"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletSummary"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1458,20 +2176,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.ExamSummary"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamSummary"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1497,14 +2215,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.FeedPost"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.FeedPost"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1539,14 +2257,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.LeaderboardEntry"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.LeaderboardEntry"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1570,19 +2288,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.MeResponse"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.MeResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1622,20 +2340,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.PodcastEpisode"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1668,25 +2386,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.PodcastEpisode"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PodcastEpisode"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1712,20 +2430,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.PracticeSession"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1753,7 +2471,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.PracticeSessionCreateRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionCreateRequest"
                         }
                     }
                 ],
@@ -1761,25 +2479,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/entity.PracticeSession"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1812,25 +2530,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.PracticeSessionDetail"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionDetail"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1867,7 +2585,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.PracticeAnswerRequest"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeAnswerRequest"
                         }
                     }
                 ],
@@ -1875,25 +2593,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.PracticeSessionQuestion"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1917,19 +2635,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.ReferralSummary"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ReferralSummary"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -1955,20 +2673,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.RevisionItem"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.RevisionItem"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2002,20 +2720,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Subject"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Subject"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2050,26 +2768,26 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.Topic"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Topic"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2096,7 +2814,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.Translate"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_controller_http_v1_request.Translate"
                         }
                     }
                 ],
@@ -2104,19 +2822,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.Translation"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Translation"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2140,13 +2858,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.TranslationHistory"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.TranslationHistory"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2170,19 +2888,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entity.WalletSummary"
+                            "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletSummary"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2208,20 +2926,20 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.WalletTransaction"
+                                "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletTransaction"
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/response.Error"
+                            "$ref": "#/definitions/internal_controller_http_v1.ErrorResponse"
                         }
                     }
                 }
@@ -2229,7 +2947,59 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.AISettings": {
+        "github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminSubjectCreateRequest": {
+            "type": "object",
+            "required": [
+                "exam",
+                "name"
+            ],
+            "properties": {
+                "exam": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_controller_http_v1_request.AdminTopicCreateRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "subjectId"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "subjectId": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_controller_http_v1_request.Translate": {
+            "type": "object",
+            "required": [
+                "destination",
+                "original",
+                "source"
+            ],
+            "properties": {
+                "destination": {
+                    "type": "string",
+                    "example": "en"
+                },
+                "original": {
+                    "type": "string",
+                    "example": "текст для перевода"
+                },
+                "source": {
+                    "type": "string",
+                    "example": "auto"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AISettings": {
             "type": "object",
             "properties": {
                 "includeGuessedCorrect": {
@@ -2255,7 +3025,345 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.AnalyticsOverview": {
+        "github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteRequest": {
+            "type": "object",
+            "required": [
+                "userIds"
+            ],
+            "properties": {
+                "userIds": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminBulkDeleteResponse": {
+            "type": "object",
+            "properties": {
+                "deleted": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusRequest": {
+            "type": "object",
+            "required": [
+                "status",
+                "userIds"
+            ],
+            "properties": {
+                "status": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus"
+                },
+                "userIds": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminBulkStatusResponse": {
+            "type": "object",
+            "properties": {
+                "updated": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminEventSummary": {
+            "type": "object",
+            "properties": {
+                "exam": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "registeredCount": {
+                    "type": "integer"
+                },
+                "startAt": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus"
+                },
+                "type": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminEventsResponse": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminEventSummary"
+                    }
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminInviteRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminInviteResponse": {
+            "type": "object",
+            "properties": {
+                "expiresAt": {
+                    "type": "string"
+                },
+                "invited": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminLoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminProfile": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "primaryExam": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminReferralSummary": {
+            "type": "object",
+            "properties": {
+                "newUsers": {
+                    "type": "integer"
+                },
+                "range": {
+                    "type": "string"
+                },
+                "rewardsPaid": {
+                    "type": "integer"
+                },
+                "totalReferrals": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUser": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUserCreateRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName",
+                "password",
+                "phoneNumber",
+                "role",
+                "status",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUserList": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUser"
+                    }
+                },
+                "meta": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUsersMeta"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUserRole": {
+            "type": "string",
+            "enum": [
+                "superadmin",
+                "admin",
+                "manager",
+                "cashier"
+            ],
+            "x-enum-varnames": [
+                "AdminUserRoleSuperAdmin",
+                "AdminUserRoleAdmin",
+                "AdminUserRoleManager",
+                "AdminUserRoleCashier"
+            ]
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUserStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive",
+                "invited",
+                "suspended"
+            ],
+            "x-enum-varnames": [
+                "AdminUserStatusActive",
+                "AdminUserStatusInactive",
+                "AdminUserStatusInvited",
+                "AdminUserStatusSuspended"
+            ]
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUserUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserRole"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AdminUserStatus"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AdminUsersMeta": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AnalyticsOverview": {
             "type": "object",
             "properties": {
                 "activeUsers": {
@@ -2278,18 +3386,49 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.AuthResponse": {
+        "github_com_evrone_go-clean-template_internal_entity.AnalyticsPoint": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AnalyticsTimeSeries": {
+            "type": "object",
+            "properties": {
+                "exam": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
+                },
+                "metric": {
+                    "type": "string"
+                },
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.AnalyticsPoint"
+                    }
+                },
+                "range": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.AuthResponse": {
             "type": "object",
             "properties": {
                 "accessToken": {
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/entity.User"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.User"
                 }
             }
         },
-        "entity.Coupon": {
+        "github_com_evrone_go-clean-template_internal_entity.Coupon": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -2321,7 +3460,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.CouponCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.CouponCreateRequest": {
             "type": "object",
             "required": [
                 "code",
@@ -2354,7 +3493,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.CouponRedeemRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.CouponRedeemRequest": {
             "type": "object",
             "required": [
                 "code"
@@ -2365,7 +3504,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.ExamCategory": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamCategory": {
             "type": "string",
             "enum": [
                 "NEET_PG",
@@ -2380,7 +3519,7 @@ const docTemplate = `{
                 "ExamCategoryUPSC"
             ]
         },
-        "entity.ExamConfig": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamConfig": {
             "type": "object",
             "properties": {
                 "description": {
@@ -2390,7 +3529,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "id": {
                     "type": "string"
@@ -2414,17 +3553,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/entity.ExamStatus"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus"
                 },
                 "timeLimitMinutes": {
                     "type": "integer"
                 },
                 "type": {
-                    "$ref": "#/definitions/entity.ExamConfigType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType"
                 }
             }
         },
-        "entity.ExamConfigCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamConfigCreateRequest": {
             "type": "object",
             "required": [
                 "exam",
@@ -2441,7 +3580,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "marksPerCorrect": {
                     "type": "number"
@@ -2465,11 +3604,11 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "type": {
-                    "$ref": "#/definitions/entity.ExamConfigType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType"
                 }
             }
         },
-        "entity.ExamConfigType": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamConfigType": {
             "type": "string",
             "enum": [
                 "MOCK",
@@ -2484,7 +3623,7 @@ const docTemplate = `{
                 "ExamTypeDailyTest"
             ]
         },
-        "entity.ExamConfigUpdateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamConfigUpdateRequest": {
             "type": "object",
             "properties": {
                 "description": {
@@ -2512,24 +3651,24 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/entity.ExamStatus"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamStatus"
                 },
                 "timeLimitMinutes": {
                     "type": "integer"
                 },
                 "type": {
-                    "$ref": "#/definitions/entity.ExamConfigType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfigType"
                 }
             }
         },
-        "entity.ExamProfile": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamProfile": {
             "type": "object",
             "properties": {
                 "currentStreakDays": {
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "lastLoginAt": {
                     "type": "string"
@@ -2551,7 +3690,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.ExamStatus": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamStatus": {
             "type": "string",
             "enum": [
                 "DRAFT",
@@ -2566,14 +3705,14 @@ const docTemplate = `{
                 "ExamStatusCompleted"
             ]
         },
-        "entity.ExamSummary": {
+        "github_com_evrone_go-clean-template_internal_entity.ExamSummary": {
             "type": "object",
             "properties": {
                 "bestScore": {
                     "type": "number"
                 },
                 "config": {
-                    "$ref": "#/definitions/entity.ExamConfig"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamConfig"
                 },
                 "isCompleted": {
                     "type": "boolean"
@@ -2583,7 +3722,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.FeedPost": {
+        "github_com_evrone_go-clean-template_internal_entity.FeedPost": {
             "type": "object",
             "properties": {
                 "author": {
@@ -2627,7 +3766,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.LeaderboardEntry": {
+        "github_com_evrone_go-clean-template_internal_entity.LeaderboardEntry": {
             "type": "object",
             "properties": {
                 "avatarUrl": {
@@ -2656,7 +3795,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.LeaderboardStats": {
+        "github_com_evrone_go-clean-template_internal_entity.LeaderboardStats": {
             "type": "object",
             "properties": {
                 "averageAccuracy": {
@@ -2670,18 +3809,18 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.MeResponse": {
+        "github_com_evrone_go-clean-template_internal_entity.MeResponse": {
             "type": "object",
             "properties": {
                 "examProfile": {
-                    "$ref": "#/definitions/entity.ExamProfile"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamProfile"
                 },
                 "user": {
-                    "$ref": "#/definitions/entity.User"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.User"
                 }
             }
         },
-        "entity.PodcastCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.PodcastCreateRequest": {
             "type": "object",
             "required": [
                 "audioUrl",
@@ -2699,7 +3838,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "isActive": {
                     "type": "boolean"
@@ -2721,7 +3860,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.PodcastEpisode": {
+        "github_com_evrone_go-clean-template_internal_entity.PodcastEpisode": {
             "type": "object",
             "properties": {
                 "audioUrl": {
@@ -2734,7 +3873,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "id": {
                     "type": "string"
@@ -2759,7 +3898,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.PracticeAnswerRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeAnswerRequest": {
             "type": "object",
             "required": [
                 "selectedOption",
@@ -2777,7 +3916,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.PracticeMode": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeMode": {
             "type": "string",
             "enum": [
                 "smart",
@@ -2792,33 +3931,33 @@ const docTemplate = `{
                 "PracticeModeExam"
             ]
         },
-        "entity.PracticeSession": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeSession": {
             "type": "object",
             "properties": {
                 "completedAt": {
                     "type": "string"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "id": {
                     "type": "string"
                 },
                 "mode": {
-                    "$ref": "#/definitions/entity.PracticeMode"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeMode"
                 },
                 "startedAt": {
                     "type": "string"
                 },
                 "status": {
-                    "$ref": "#/definitions/entity.PracticeSessionStatus"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionStatus"
                 },
                 "totalQuestionsPlanned": {
                     "type": "integer"
                 }
             }
         },
-        "entity.PracticeSessionCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeSessionCreateRequest": {
             "type": "object",
             "required": [
                 "mode"
@@ -2831,10 +3970,10 @@ const docTemplate = `{
                     }
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "mode": {
-                    "$ref": "#/definitions/entity.PracticeMode"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeMode"
                 },
                 "numQuestions": {
                     "type": "integer"
@@ -2856,23 +3995,26 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.PracticeSessionDetail": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeSessionDetail": {
             "type": "object",
             "properties": {
                 "questions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.PracticeSessionQuestion"
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion"
                     }
                 },
                 "session": {
-                    "$ref": "#/definitions/entity.PracticeSession"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.PracticeSession"
                 }
             }
         },
-        "entity.PracticeSessionQuestion": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeSessionQuestion": {
             "type": "object",
             "properties": {
+                "answeredAt": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -2880,7 +4022,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "question": {
-                    "$ref": "#/definitions/entity.Question"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                 },
                 "selectedOption": {
                     "type": "integer"
@@ -2893,7 +4035,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.PracticeSessionStatus": {
+        "github_com_evrone_go-clean-template_internal_entity.PracticeSessionStatus": {
             "type": "string",
             "enum": [
                 "in_progress",
@@ -2906,11 +4048,11 @@ const docTemplate = `{
                 "PracticeStatusAbandoned"
             ]
         },
-        "entity.Question": {
+        "github_com_evrone_go-clean-template_internal_entity.Question": {
             "type": "object",
             "properties": {
                 "choiceType": {
-                    "$ref": "#/definitions/entity.QuestionChoiceType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType"
                 },
                 "correctOption": {
                     "type": "integer"
@@ -2919,7 +4061,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "explanation": {
                     "type": "string"
@@ -2962,7 +4104,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.QuestionChoiceType": {
+        "github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType": {
             "type": "string",
             "enum": [
                 "single",
@@ -2973,7 +4115,7 @@ const docTemplate = `{
                 "ChoiceTypeMulti"
             ]
         },
-        "entity.QuestionCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.QuestionCreateRequest": {
             "type": "object",
             "required": [
                 "correctOption",
@@ -2988,7 +4130,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "choiceType": {
-                    "$ref": "#/definitions/entity.QuestionChoiceType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType"
                 },
                 "correctOption": {
                     "type": "integer",
@@ -2999,7 +4141,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "explanation": {
                     "type": "string"
@@ -3039,11 +4181,11 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.QuestionUpdateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.QuestionUpdateRequest": {
             "type": "object",
             "properties": {
                 "choiceType": {
-                    "$ref": "#/definitions/entity.QuestionChoiceType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.QuestionChoiceType"
                 },
                 "correctOption": {
                     "type": "integer"
@@ -3089,7 +4231,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.ReferralSummary": {
+        "github_com_evrone_go-clean-template_internal_entity.ReferralSummary": {
             "type": "object",
             "properties": {
                 "activated": {
@@ -3109,7 +4251,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.RevisionItem": {
+        "github_com_evrone_go-clean-template_internal_entity.RevisionItem": {
             "type": "object",
             "properties": {
                 "id": {
@@ -3122,18 +4264,18 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "question": {
-                    "$ref": "#/definitions/entity.Question"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Question"
                 },
                 "timesReviewed": {
                     "type": "integer"
                 }
             }
         },
-        "entity.Subject": {
+        "github_com_evrone_go-clean-template_internal_entity.Subject": {
             "type": "object",
             "properties": {
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "id": {
                     "type": "string"
@@ -3146,7 +4288,35 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.TelegramAuthRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyItem": {
+            "type": "object",
+            "properties": {
+                "accuracy": {
+                    "type": "number"
+                },
+                "subjectId": {
+                    "type": "string"
+                },
+                "subjectName": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyResponse": {
+            "type": "object",
+            "properties": {
+                "exam": {
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
+                },
+                "subjects": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.SubjectAccuracyItem"
+                    }
+                }
+            }
+        },
+        "github_com_evrone_go-clean-template_internal_entity.TelegramAuthRequest": {
             "type": "object",
             "required": [
                 "exam",
@@ -3157,14 +4327,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "telegramId": {
                     "type": "string"
                 }
             }
         },
-        "entity.Topic": {
+        "github_com_evrone_go-clean-template_internal_entity.Topic": {
             "type": "object",
             "properties": {
                 "id": {
@@ -3181,7 +4351,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.Translation": {
+        "github_com_evrone_go-clean-template_internal_entity.Translation": {
             "type": "object",
             "properties": {
                 "destination": {
@@ -3202,18 +4372,18 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.TranslationHistory": {
+        "github_com_evrone_go-clean-template_internal_entity.TranslationHistory": {
             "type": "object",
             "properties": {
                 "history": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.Translation"
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.Translation"
                     }
                 }
             }
         },
-        "entity.User": {
+        "github_com_evrone_go-clean-template_internal_entity.User": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -3229,17 +4399,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "primaryExam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.ExamCategory"
                 },
                 "role": {
-                    "$ref": "#/definitions/entity.UserRole"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.UserRole"
                 },
                 "telegramId": {
                     "type": "string"
                 }
             }
         },
-        "entity.UserRole": {
+        "github_com_evrone_go-clean-template_internal_entity.UserRole": {
             "type": "string",
             "enum": [
                 "USER",
@@ -3252,7 +4422,7 @@ const docTemplate = `{
                 "UserRoleSuperAdmin"
             ]
         },
-        "entity.WalletSummary": {
+        "github_com_evrone_go-clean-template_internal_entity.WalletSummary": {
             "type": "object",
             "properties": {
                 "balance": {
@@ -3266,7 +4436,7 @@ const docTemplate = `{
                 }
             }
         },
-        "entity.WalletTransaction": {
+        "github_com_evrone_go-clean-template_internal_entity.WalletTransaction": {
             "type": "object",
             "properties": {
                 "amount": {
@@ -3282,11 +4452,11 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
-                    "$ref": "#/definitions/entity.WalletTxType"
+                    "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WalletTxType"
                 }
             }
         },
-        "entity.WalletTxType": {
+        "github_com_evrone_go-clean-template_internal_entity.WalletTxType": {
             "type": "string",
             "enum": [
                 "REWARD",
@@ -3307,59 +4477,41 @@ const docTemplate = `{
                 "WalletTxBonus"
             ]
         },
-        "request.AdminSubjectCreateRequest": {
+        "github_com_evrone_go-clean-template_internal_entity.WeakTopicItem": {
             "type": "object",
-            "required": [
-                "exam",
-                "name"
-            ],
             "properties": {
-                "exam": {
-                    "$ref": "#/definitions/entity.ExamCategory"
+                "accuracy": {
+                    "type": "number"
                 },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "request.AdminTopicCreateRequest": {
-            "type": "object",
-            "required": [
-                "name",
-                "subjectId"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
+                "attempts": {
+                    "type": "integer"
                 },
                 "subjectId": {
                     "type": "string"
+                },
+                "subjectName": {
+                    "type": "string"
+                },
+                "topicId": {
+                    "type": "string"
+                },
+                "topicName": {
+                    "type": "string"
                 }
             }
         },
-        "request.Translate": {
+        "github_com_evrone_go-clean-template_internal_entity.WeakTopicsResponse": {
             "type": "object",
-            "required": [
-                "destination",
-                "original",
-                "source"
-            ],
             "properties": {
-                "destination": {
-                    "type": "string",
-                    "example": "en"
-                },
-                "original": {
-                    "type": "string",
-                    "example": "текст для перевода"
-                },
-                "source": {
-                    "type": "string",
-                    "example": "auto"
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_evrone_go-clean-template_internal_entity.WeakTopicItem"
+                    }
                 }
             }
         },
-        "response.Error": {
+        "internal_controller_http_v1.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -3368,31 +4520,17 @@ const docTemplate = `{
                 }
             }
         }
-    },
-    "securityDefinitions": {
-        "AdminAuth": {
-            "description": "Bearer Auth for admins (format: Bearer {token})",
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        },
-        "UserAuth": {
-            "description": "Bearer Auth for users (format: Bearer {token})",
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
-	Host:             "localhost:8080",
-	BasePath:         "/v1",
+	Version:          "",
+	Host:             "",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Go Clean Template API",
-	Description:      "Using a translation service as an example",
+	Title:            "",
+	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

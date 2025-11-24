@@ -3,9 +3,12 @@ package v1
 import (
 	"net/http"
 
+	"github.com/evrone/go-clean-template/internal/entity"
 	"github.com/evrone/go-clean-template/internal/repo"
 	"github.com/gofiber/fiber/v2"
 )
+
+var _ = entity.PodcastEpisode{}
 
 func registerPodcastRoutes(api fiber.Router, r *Routes) {
 	api.Get("", r.listPodcasts)
@@ -19,8 +22,8 @@ func registerPodcastRoutes(api fiber.Router, r *Routes) {
 // @Param subjectId query string false "Subject ID"
 // @Param topicId query string false "Topic ID"
 // @Success 200 {array} entity.PodcastEpisode
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /podcasts [get]
 func (r *Routes) listPodcasts(ctx *fiber.Ctx) error {
 	filter := repo.PodcastFilter{}
@@ -53,9 +56,9 @@ func (r *Routes) listPodcasts(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Episode ID"
 // @Success 200 {object} entity.PodcastEpisode
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /podcasts/{id} [get]
 func (r *Routes) getPodcast(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")

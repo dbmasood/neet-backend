@@ -20,8 +20,8 @@ func registerAdminCouponsRoutes(api fiber.Router, r *Routes) {
 // @Security AdminAuth
 // @Produce json
 // @Success 200 {array} entity.Coupon
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/coupons [get]
 func (r *Routes) adminListCoupons(ctx *fiber.Ctx) error {
 	coupons, err := r.uc.Coupon.AdminList(ctx.UserContext())
@@ -40,9 +40,9 @@ func (r *Routes) adminListCoupons(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.CouponCreateRequest true "Coupon payload"
 // @Success 201 {object} entity.Coupon
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/coupons [post]
 func (r *Routes) adminCreateCoupon(ctx *fiber.Ctx) error {
 	var payload entity.CouponCreateRequest
@@ -71,9 +71,9 @@ func (r *Routes) adminCreateCoupon(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param id path string true "Coupon ID"
 // @Success 200 {object} entity.Coupon
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/coupons/{id} [get]
 func (r *Routes) adminGetCoupon(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -99,9 +99,9 @@ func (r *Routes) adminGetCoupon(ctx *fiber.Ctx) error {
 // @Param id path string true "Coupon ID"
 // @Param request body entity.CouponCreateRequest true "Coupon payload"
 // @Success 200 {object} entity.Coupon
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /admin/coupons/{id} [patch]
 func (r *Routes) adminUpdateCoupon(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")
@@ -135,8 +135,8 @@ func (r *Routes) adminUpdateCoupon(ctx *fiber.Ctx) error {
 // @Security AdminAuth
 // @Param id path string true "Coupon ID"
 // @Success 204
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
 // @Router /admin/coupons/{id} [delete]
 func (r *Routes) adminDeleteCoupon(ctx *fiber.Ctx) error {
 	id, err := parseUUID(ctx, "id")

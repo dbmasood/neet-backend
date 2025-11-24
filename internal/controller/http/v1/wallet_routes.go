@@ -29,8 +29,8 @@ func registerWalletRoutes(api fiber.Router, r *Routes, auth *jwt.Service) {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {object} entity.WalletSummary
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /wallet [get]
 func (r *Routes) walletSummary(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)
@@ -53,8 +53,8 @@ func (r *Routes) walletSummary(ctx *fiber.Ctx) error {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {array} entity.WalletTransaction
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /wallet/transactions [get]
 func (r *Routes) walletTransactions(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)
@@ -79,9 +79,9 @@ func (r *Routes) walletTransactions(ctx *fiber.Ctx) error {
 // @Produce json
 // @Param request body entity.CouponRedeemRequest true "Coupon payload"
 // @Success 200 {object} entity.WalletSummary
-// @Failure 400 {object} response.Error
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /coupons/redeem [post]
 func (r *Routes) redeemCoupon(ctx *fiber.Ctx) error {
 	var payload entity.CouponRedeemRequest
@@ -115,8 +115,8 @@ func (r *Routes) redeemCoupon(ctx *fiber.Ctx) error {
 // @Security UserAuth
 // @Produce json
 // @Success 200 {object} entity.ReferralSummary
-// @Failure 401 {object} response.Error
-// @Failure 500 {object} response.Error
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /referral [get]
 func (r *Routes) referralSummary(ctx *fiber.Ctx) error {
 	userID, err := r.getUserID(ctx)

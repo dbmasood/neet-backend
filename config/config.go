@@ -19,6 +19,7 @@ type (
 		Metrics Metrics
 		Swagger Swagger
 		JWT     JWT
+		Admin   Admin
 	}
 
 	// App -.
@@ -75,6 +76,18 @@ type (
 		UserSecret      string `env:"JWT_USER_SECRET,required"`
 		AdminSecret     string `env:"JWT_ADMIN_SECRET,required"`
 		TokenTTLMinutes int    `env:"JWT_TOKEN_TTL_MINUTES" envDefault:"1440"`
+	}
+
+	Admin struct {
+		Username     string   `env:"ADMIN_USERNAME,required"`
+		Password     string   `env:"ADMIN_PASSWORD,required"`
+		DisplayName  string   `env:"ADMIN_DISPLAY_NAME" envDefault:"Super Admin"`
+		Email        string   `env:"ADMIN_EMAIL,required"`
+		UserID       string   `env:"ADMIN_USER_ID" envDefault:"00000000-0000-0000-0000-000000000001"`
+		PrimaryExam  string   `env:"ADMIN_PRIMARY_EXAM" envDefault:"NEET_PG"`
+		Role         string   `env:"ADMIN_ROLE" envDefault:"ADMIN"`
+		Permissions  []string `env:"ADMIN_PERMISSIONS" envDefault:"subjects.read,subjects.write" envSeparator:","`
+		CreatedAtISO string   `env:"ADMIN_CREATED_AT"`
 	}
 )
 
